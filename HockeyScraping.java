@@ -33,24 +33,19 @@ public class HockeyScraping {
         
         //grab data
         String link = "http://www.nhl.com/scores/htmlreports/20142015/PL030416.HTM"; //test game sheet
-        Scraping one = new Scraping(); //instantiating Scraping object
-        List<String[]> lineTokens = one.getGameData(link); //use Scraping to create table of events as 2d array list of strings
+        Scraping one = new Scraping(link); //instantiating Scraping object
+        List<String[]> lineTokens = one.getGameData(); //use Scraping to create table of events as 2d array list of strings
+        String[] teams = one.getTeams();
         
         //parse data
 	Parsing two = new Parsing(lineTokens);
-        String home_roster_link = "http://www.hockey-reference.com/teams/CHI/2015.html";
-        String away_roster_link = "http://www.hockey-reference.com/teams/TBL/2015.html";
-        Scraping home_roster = new Scraping();
-        Scraping away_roster = new Scraping();
-        List<String[]> homeRosterData = home_roster.getPlayerNames(home_roster_link);
-        //List<String[]> awayRosterData = away_roster.getPlayerNames(away_roster_link);
-        for(int i = 0; i < homeRosterData.size(); i++){
-            for(int j = 0; j < homeRosterData.get(i).length; j++){
-                System.out.print(homeRosterData.get(i)[j] + ", ");
-            }
-            System.out.println("");
-            
-        }
+        String home_roster_link = "http://www.hockey-reference.com/teams/" + teams[0] + "/2015.html";
+        String away_roster_link = "http://www.hockey-reference.com/teams/" + teams[1] + "/2015.html";
+        Scraping home_roster = new Scraping(home_roster_link);
+        Scraping away_roster = new Scraping(away_roster_link);
+        List<String[]> homeRosterData = home_roster.getPlayerNames();
+        List<String[]> awayRosterData = away_roster.getPlayerNames();
+        
 
         //supply data to database
 			//learn how to do this

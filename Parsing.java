@@ -22,7 +22,7 @@ public class Parsing {
     public static String eventType(int index){
         return tableDataTokens.get(index)[5];
     }
-    public static String[] playersOnIce(int index){
+    public static String[] getPlayerNumbers(int index){
         String[] players = new String[10]; //array of player numbers
         if(Parsing.eventType(index).equals("BLOCK")){
             //tokens 17, 20, 23, are away FWDs, 
@@ -76,4 +76,15 @@ public class Parsing {
         }
         return players;    
     }
+    public static String[] retriveName(String playerNumber, List<String[]> rosterData){
+        String[] name = null;
+        for(int i = 0; i < rosterData.size(); i++){
+            if(rosterData.get(i)[0].equals(playerNumber)){
+                name[0] = rosterData.get(i)[2];
+                name[1] = rosterData.get(i)[3];
+            }
+        }
+        return name;
+    }
+
 }
