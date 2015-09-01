@@ -13,7 +13,8 @@ package hockeyscraping;
 
 import java.io.IOException;
 import java.util.List;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Document;
@@ -29,26 +30,56 @@ public class HockeyScraping {
     /**
      * @param args the command line arguments
      */
+    public static String link;
+    public static List<String[]> lineTokens;
+    public static Parsing parse;
+    public static Scraping scrape;
+    
     public static void main(String[] args) {
         
         //grab data
         String link = "http://www.nhl.com/scores/htmlreports/20142015/PL030416.HTM"; //test game sheet
-        Scraping one = new Scraping(link); //instantiating Scraping object
-        List<String[]> lineTokens = one.getGameData(); //use Scraping to create table of events as 2d array list of strings
-        String[] teams = one.getTeams();
-        
+        scrape = new Scraping(link); //instantiating Scraping object
+        lineTokens = scrape.getGameData(); //use Scraping to create table of events as 2d array list of strings
+        scrape.setTeams();
+        String[] teams = new String[2];
+        teams = scrape.getTeams();
         //parse data
-	Parsing two = new Parsing(lineTokens);
+	parse = new Parsing(lineTokens);
         String home_roster_link = "http://www.hockey-reference.com/teams/" + teams[0] + "/2015.html";
         String away_roster_link = "http://www.hockey-reference.com/teams/" + teams[1] + "/2015.html";
         Scraping home_roster = new Scraping(home_roster_link);
         Scraping away_roster = new Scraping(away_roster_link);
-        List<String[]> homeRosterData = home_roster.getPlayerNames();
-        List<String[]> awayRosterData = away_roster.getPlayerNames();
-        
 
+        List<String> playerNames = new ArrayList<String>();
+        
+        /*for(int i = 0; i < lineTokens.size();i++){
+            for(int j = 0; j < lineTokens.get(i).length; j++){
+                System.out.print(lineTokens.get(i)[j] + ",");
+            }
+            System.out.println("");
+        }*/
+        //data analysis
+        CorsiCount();
+        
         //supply data to database
 			//learn how to do this
     }  
     
+    public static void CorsiCount(){
+        
+        for(int i =0; i< lineTokens.size(); i++){
+            if(/*parse.getEventType(i).equals("BLOCK") || parse.getEventType(i).equals("SHOT") || parse.getEventType(i).equals("MISS") ||*/ parse.getEventType(i).equals("GOAL")){
+                String[] playerNumbers = parse.getPlayerNumbers(i);
+                for(int j = 0; j < 11; j++){
+                    System.out.print(playerNumbers[j] + ", ");
+                    
+                }
+                System.out.println(parse.getEventType(i));
+                String[] teams = scrape.getTeams();
+                
+                
+            }
+        }
+    }
 }

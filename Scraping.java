@@ -22,6 +22,8 @@ public class Scraping {
     
     private static List<String[]> ListLineTokens = null;
     private static String link;
+    private static List<String[]> rosterData = null;
+    private static String[] teams = null;
     
     //instantiation for scraping adds the link and creats the 2d array list of strings
     public Scraping(String link){
@@ -56,14 +58,14 @@ public class Scraping {
         return ListLineTokens;
     }
     
-    public List<String[]> getPlayerNames(){
+    public List<String[]> getRosterData(){
         Document doc = null;
         String line = null;
         String delims = "[ ]+"; //within the square braces is the delimiter for the elements. 
         //ArrayList<String> temp = new ArrayList<String>(); 
         String[] tempLineTokens = null;
         
-        List<String[]> rosterNames = new ArrayList<String[]>();
+        rosterData = new ArrayList<String[]>();
         //String[][] arrayLineTokens = new String[400][60]; //Array implementation for quick testing
         try{ //attempt to connect to the link provided
             doc = Jsoup.connect(link).maxBodySize(0).get();
@@ -124,12 +126,12 @@ public class Scraping {
                 if(tempLineTokens[j+14-goalieBuffer+threeNamesBuffer].equals("GAA")){
                         goalieBuffer = goalieBuffer + 3;
             }}
-            rosterNames.add(temp);//adds the created string array to the roster list
+            rosterData.add(temp);//adds the created string array to the roster list
         }
-        return rosterNames;
+        return rosterData;
     }
-    public static String[] getTeams(){
-        String[] teams = new String[2];
+    public static void setTeams(){
+        teams = new String[2];
         Document doc = null;
         String line = null;
         String delims = "[ ]+";
@@ -186,6 +188,8 @@ public class Scraping {
         }
         if(v_lineTokens[3].equals("BLACKHAWKS")){
             teams[1] = "CHI";
-        }
+        }}
+    public static String[] getTeams(){
         return teams;
-}}
+    }
+}
